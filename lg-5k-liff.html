@@ -14,8 +14,8 @@
     --green: #1D9E75;
     --gray-bg: #f7f7f8;
     --gray-border: #eee;
-    --gray-label: #aaa;
-    --gray-ph: #ccc;
+    --gray-label: #333;
+    --gray-ph: #999;
     --text: #222;
     --white: #fff;
     --radius: 12px;
@@ -87,22 +87,22 @@
   .field.success { border-color: var(--green); }
 
   .f-label {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--gray-label);
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    margin-bottom: 7px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin-bottom: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   .f-req { color: var(--red); margin-left: 2px; }
-  .f-opt { color: var(--gray-ph); font-weight: 400; font-size: 10px; }
+  .f-opt { color: #777; font-weight: 400; font-size: 10px; }
   .f-badge {
-    background: #f0f0f0; color: #999;
+    background: #f0f0f0; color: #555;
     font-size: 9px; padding: 2px 7px; border-radius: 8px; font-weight: 500;
   }
-  .f-fixed-val { font-size: 13px; color: #888; font-weight: 500; }
+  .f-fixed-val { font-size: 13px; color: #333; font-weight: 500; }
 
   .f-input {
     width: 100%;
@@ -137,7 +137,7 @@
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .two-col-wide { display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px; }
   .sub-field { display: flex; flex-direction: column; gap: 5px; }
-  .s-label { font-size: 10px; color: var(--gray-label); font-weight: 600; letter-spacing: 0.02em; }
+  .s-label { font-size: 12px; color: var(--gray-label); font-weight: 600; letter-spacing: 0.02em; }
   .s-req { color: var(--red); }
   .divider { border: none; border-top: 1px solid #f5f5f5; margin: 10px 0; }
 
@@ -271,7 +271,7 @@
     border: none; background: none; cursor: pointer;
     border-right: 1px solid #eee;
     font-family: 'Noto Sans Thai', sans-serif;
-    font-size: 13px; font-weight: 500; color: #bbb;
+    font-size: 13px; font-weight: 500; color: #555;
     transition: background 0.1s, color 0.1s;
   }
   .rm-btn:last-child { border-right: none; }
@@ -302,7 +302,7 @@
     margin-top: 1px;
   }
   .consent-note {
-    font-size: 10.5px; color: #999; line-height: 1.6;
+    font-size: 10.5px; color: #666; line-height: 1.6;
     padding: 8px 10px; background: #fafafa;
     border-radius: 6px; margin-bottom: 12px;
   }
@@ -599,11 +599,11 @@
     </div>
     <div class="field">
       <div class="f-label" style="margin-bottom:10px;">ข้อมูลการแข่งขัน</div>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:13px;"><span style="color:#aaa;">วันที่</span><span style="font-weight:500;">21 มิถุนายน 2026 (อา.)</span></div>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:13px;"><span style="color:#aaa;">สถานที่</span><span style="font-weight:500;text-align:right;max-width:60%;">ลานคนเมือง เสาชิงช้า กทม.</span></div>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:13px;"><span style="color:#aaa;">เวลาปล่อยตัว</span><span style="font-weight:600;color:var(--red);">04:45 น.</span></div>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:13px;"><span style="color:#aaa;">Cut-off 3km</span><span style="font-weight:600;color:var(--red);">05:45 น.</span></div>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:#aaa;">Cut-off 5km</span><span style="font-weight:600;color:var(--red);">06:15 น.</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:13px;"><span style="color:#333;">วันที่</span><span style="font-weight:500;">21 มิถุนายน 2026 (อา.)</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:13px;"><span style="color:#333;">สถานที่</span><span style="font-weight:500;text-align:right;max-width:60%;">ลานคนเมือง เสาชิงช้า กทม.</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:13px;"><span style="color:#333;">เวลาปล่อยตัว</span><span style="font-weight:600;color:var(--red);">04:45 น.</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:13px;"><span style="color:#333;">Cut-off 3km</span><span style="font-weight:600;color:var(--red);">05:45 น.</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:#333;">Cut-off 5km</span><span style="font-weight:600;color:var(--red);">06:15 น.</span></div>
     </div>
     <div class="field">
       <div class="f-label" style="margin-bottom:10px;">Race Pack 5K</div>
@@ -617,12 +617,12 @@
     </div>
     <div class="field">
       <div class="f-label" style="margin-bottom:10px;">กำหนดการ Race Day</div>
-      <div style="display:flex;gap:12px;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;"><span style="color:#bbb;min-width:44px;">03:00</span><span style="color:#bbb;">เปิดพื้นที่จัดการแข่งขัน</span></div>
-      <div style="display:flex;gap:12px;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;"><span style="color:#bbb;min-width:44px;">04:40</span><span>นักวิ่ง 5K พร้อมที่จุดปล่อยตัว</span></div>
+      <div style="display:flex;gap:12px;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;"><span style="color:#555;min-width:44px;">03:00</span><span style="color:#555;">เปิดพื้นที่จัดการแข่งขัน</span></div>
+      <div style="display:flex;gap:12px;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;"><span style="color:#555;min-width:44px;">04:40</span><span>นักวิ่ง 5K พร้อมที่จุดปล่อยตัว</span></div>
       <div style="display:flex;gap:12px;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;"><span style="color:var(--red);font-weight:700;min-width:44px;">04:45</span><span style="color:var(--red);font-weight:600;">ปล่อยตัว 5K</span></div>
       <div style="display:flex;gap:12px;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;"><span style="color:var(--red);font-weight:700;min-width:44px;">05:45</span><span>Cut-off 3km</span></div>
       <div style="display:flex;gap:12px;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;"><span style="color:var(--red);font-weight:700;min-width:44px;">06:15</span><span>Cut-off 5km (เส้นชัย)</span></div>
-      <div style="display:flex;gap:12px;padding:5px 0;font-size:12px;"><span style="color:#bbb;min-width:44px;">08:00</span><span style="color:#bbb;">สิ้นสุดกิจกรรม</span></div>
+      <div style="display:flex;gap:12px;padding:5px 0;font-size:12px;"><span style="color:#555;min-width:44px;">08:00</span><span style="color:#555;">สิ้นสุดกิจกรรม</span></div>
     </div>
   </div>
 </div>
@@ -636,25 +636,25 @@
     </div>
     <div style="background:#fff;border-radius:12px;padding:12px 14px;border:1px solid #f0f0f0;display:flex;gap:12px;align-items:flex-start;">
       <div style="width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
-      <div><div style="font-size:13px;font-weight:600;">กรอกข้อมูลใน "ลงทะเบียน" ให้ครบถ้วน</div><div style="font-size:11px;color:#aaa;margin-top:3px;">LG ต้องการทราบรายชื่อผู้เข้าร่วมกิจกรรม</div></div>
+      <div><div style="font-size:13px;font-weight:600;">กรอกข้อมูลใน "ลงทะเบียน" ให้ครบถ้วน</div><div style="font-size:11px;color:#555;margin-top:3px;">LG ต้องการทราบรายชื่อผู้เข้าร่วมกิจกรรม</div></div>
     </div>
     <div style="background:#fff;border-radius:12px;padding:12px 14px;border:1px solid #f0f0f0;display:flex;gap:12px;align-items:flex-start;">
       <div style="width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-      <div><div style="font-size:13px;font-weight:600;">กดปุ่มด้านล่างเพื่อสมัครวิ่งอย่างเป็นทางการ</div><div style="font-size:11px;color:#aaa;margin-top:3px;">ผ่านระบบ CheckRace</div></div>
+      <div><div style="font-size:13px;font-weight:600;">กดปุ่มด้านล่างเพื่อสมัครวิ่งอย่างเป็นทางการ</div><div style="font-size:11px;color:#555;margin-top:3px;">ผ่านระบบ CheckRace</div></div>
     </div>
     <div style="background:#fff;border-radius:12px;padding:12px 14px;border:1px solid #f0f0f0;display:flex;gap:12px;align-items:flex-start;">
       <div style="width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
-      <div><div style="font-size:13px;font-weight:600;">เลือกประเภท 5K และดำเนินการสมัคร</div><div style="font-size:11px;color:#aaa;margin-top:3px;">LG จะดูแลค่าใช้จ่ายให้</div></div>
+      <div><div style="font-size:13px;font-weight:600;">เลือกประเภท 5K และดำเนินการสมัคร</div><div style="font-size:11px;color:#555;margin-top:3px;">LG จะดูแลค่าใช้จ่ายให้</div></div>
     </div>
     <div style="background:#fff;border-radius:12px;padding:12px 14px;border:1px solid #f0f0f0;display:flex;gap:12px;align-items:flex-start;">
       <div style="width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
-      <div><div style="font-size:13px;font-weight:600;">รับอุปกรณ์ที่ Expo Day</div><div style="font-size:11px;color:#aaa;margin-top:3px;">20 มิ.ย. 2026 เวลา 10:00–18:00 น. ลานคนเมือง</div></div>
+      <div><div style="font-size:13px;font-weight:600;">รับอุปกรณ์ที่ Expo Day</div><div style="font-size:11px;color:#555;margin-top:3px;">20 มิ.ย. 2026 เวลา 10:00–18:00 น. ลานคนเมือง</div></div>
     </div>
     <a href="https://run.checkrace.com/event/ktj26" target="_blank" style="background:#111;color:#fff;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;font-family:'Noto Sans Thai',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
       สมัครวิ่งที่นี่ (CheckRace)
     </a>
-    <div style="font-size:11px;color:#bbb;text-align:center;margin-top:-4px;">run.checkrace.com/event/ktj26</div>
+    <div style="font-size:11px;color:#777;text-align:center;margin-top:-4px;">run.checkrace.com/event/ktj26</div>
   </div>
 </div>
 
