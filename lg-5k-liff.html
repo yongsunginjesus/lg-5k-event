@@ -665,15 +665,16 @@
           <div class="two-col-wide">
             <div class="sub-field">
               <div class="s-label">ประเภท</div>
-              <select class="f-select placeholder-color" id="inp-ref-code-type" onchange="rmPh(this)">
+              <select class="f-select placeholder-color" id="inp-ref-code-type" onchange="rmPh(this);checkRefCodeInput();">
                 <option value="" disabled selected>เลือก</option>
                 <option value="LGM">LGM (ชาย)</option>
                 <option value="LGF">LGF (หญิง)</option>
+                <option value="STAFF">STAFF</option>
               </select>
             </div>
             <div class="sub-field">
               <div class="s-label">รหัส 6 หลัก (ตัวเลข)</div>
-              <input class="f-input" id="inp-ref-code-num" type="text" placeholder="000000" maxlength="6" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'')">
+              <input class="f-input" id="inp-ref-code-num" type="text" placeholder="000000" maxlength="6" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'');checkRefCodeInput();">
             </div>
           </div>
         </div>
@@ -1015,6 +1016,11 @@ function populateLgm(selId) {
 }
 populateLgm('inp-lgm');
 populateLgm('inp-ref-lgm');
+// 초기 HQ 옵션 숨김 (STAFF 선택 시에만 표시)
+var hqInLgm = document.querySelector('#inp-lgm option[value="HQ"]');
+var hqInRefLgm = document.querySelector('#inp-ref-lgm option[value="HQ"]');
+if (hqInLgm) hqInLgm.style.display = 'none';
+if (hqInRefLgm) hqInRefLgm.style.display = 'none';
 
 function onLgmChange(sel) {
   rmPh(sel);
@@ -1038,11 +1044,51 @@ function onRefLgmChange(sel) {
   lsmSel.innerHTML = '<option value="" disabled selected>เลือก LSM</option>';
   lsmSel.classList.add('placeholder-color');
   lsmSel.disabled = false;
+  var refCodeType = document.getElementById('inp-ref-code-type').value;
   (LGM_LSM[sel.value] || []).forEach(function(lsm) {
+    // LGM/LGF 선택 시 DST 제외
+    if (refCodeType !== 'STAFF' && lsm === 'DST') return;
     var opt = document.createElement('option');
     opt.value = lsm; opt.textContent = lsm;
     lsmSel.appendChild(opt);
   });
+}
+
+// ── 추천인 STAFF 자동 고정 로직 ──
+function checkRefCodeInput() {
+  var refCodeType = document.getElementById('inp-ref-code-type').value;
+  var refCodeNumEl = document.getElementById('inp-ref-code-num');
+  var refLgmSel = document.getElementById('inp-ref-lgm');
+  var refLsmSel = document.getElementById('inp-ref-lsm');
+
+  if (refCodeType === 'STAFF') {
+    // 코드 000000 고정
+    refCodeNumEl.value = '000000';
+    refCodeNumEl.readOnly = true;
+    refCodeNumEl.style.color = '#aaa';
+    // LGM = HQ 고정
+    var hqOpt = refLgmSel.querySelector('option[value="HQ"]');
+    if (hqOpt) hqOpt.style.display = '';
+    refLgmSel.value = 'HQ';
+    refLgmSel.disabled = true;
+    refLgmSel.classList.remove('placeholder-color');
+    // LSM = DST 고정
+    refLsmSel.innerHTML = '<option value="DST" selected>DST</option>';
+    refLsmSel.value = 'DST';
+    refLsmSel.disabled = true;
+    refLsmSel.classList.remove('placeholder-color');
+  } else {
+    // STAFF 아닌 경우 원래대로
+    refCodeNumEl.readOnly = false;
+    refCodeNumEl.style.color = '';
+    refLgmSel.disabled = false;
+    refLsmSel.disabled = false;
+    // HQ 옵션 숨김
+    var hqOpt2 = refLgmSel.querySelector('option[value="HQ"]');
+    if (hqOpt2) hqOpt2.style.display = 'none';
+    // 코드 초기화 (STAFF에서 다른 타입으로 변경 시)
+    if (refCodeNumEl.value === '000000') refCodeNumEl.value = '';
+  }
 }
 
 function onGenderChange(sel) { rmPh(sel); }
