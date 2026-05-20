@@ -976,6 +976,7 @@ const LGM_LSM = {
 
 var noCode = false;
 var currentTab = 'register';
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbwtBc4pY_2SN9oHTQKxOHMUtsRHcpoiHCu-PrZZV8i_brUNTrM3ZmyKGtu_V7m8CF8f/exec';
 
 // ── RICH MENU TAB SWITCH ──
 function switchTab(tab) {
@@ -1207,8 +1208,6 @@ function doSubmit() {
   };
 
   document.getElementById('loading').style.display = 'flex';
-
-  var GAS_URL = 'https://script.google.com/macros/s/AKfycbwtBc4pY_2SN9oHTQKxOHMUtsRHcpoiHCu-PrZZV8i_brUNTrM3ZmyKGtu_V7m8CF8f/exec';
 
   fetch(GAS_URL, {
     method: 'POST',
