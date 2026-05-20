@@ -637,6 +637,7 @@
             <option value="" disabled selected>เลือก</option>
             <option value="LGM">LGM (ชาย)</option>
             <option value="LGF">LGF (หญิง)</option>
+            <option value="STAFF">STAFF</option>
           </select>
         </div>
         <div class="sub-field">
@@ -965,6 +966,7 @@
 <script>
 // ── LGM / LSM DATA ──
 const LGM_LSM = {
+  "HQ": ["DST", "STAFF"],
   "LGM_001 (แป้ง)": ["LSM_023 (หมู)","LSM_043 (ปาล์มมี่)","LSM_054 (เฮ)","LSM_056 (จีจี้)","LSM_074 (น้อย)","LSM_078 (บิ๊ก)","LSM_080 (หมิว)","LSM_081 (บอส)"],
   "LGM_002 (หนิง)": ["LSM_010 (ออดี้)","LSM_014 (พีช)","LSM_034 (จา)","LSM_039 (นงค์)","LSM_048 (อี๊ด)","LSM_058 (ตูน)","LSM_071 (แอปเปิ้ล)","LSM_083 (บอล)","LSM_084 (สุ)"],
   "LGM_003 (ตุ๊ก)": ["LSM_005 (แท็ค)","LSM_006 (กิ๊ก)","LSM_011 (นุ๊ก)","LSM_012 (พล)","LSM_020 (ตังเมย์)","LSM_037 (น๊ะ)","LSM_044 (สุ)","LSM_046 (เพชร)","LSM_051 (บิ๊กเจ)","LSM_066 (ซีล่า)","LSM_072 (ฟีฟ่า)","LSM_089 (พลอย)","LSM_091 (การ์ฟิล)"],
@@ -1020,7 +1022,10 @@ function onLgmChange(sel) {
   lsmSel.innerHTML = '<option value="" disabled selected>เลือก LSM</option>';
   lsmSel.classList.add('placeholder-color');
   lsmSel.disabled = false;
+  var codeType = document.getElementById('inp-code-type').value;
   (LGM_LSM[sel.value] || []).forEach(function(lsm) {
+    // LGM/LGF 선택 시 DST 옵션 제외
+    if (codeType !== 'STAFF' && lsm === 'DST') return;
     var opt = document.createElement('option');
     opt.value = lsm; opt.textContent = lsm;
     lsmSel.appendChild(opt);
@@ -1067,29 +1072,62 @@ function toggleNoCode() {
 
 // ── SHOW/HIDE สังกัดองค์กร BASED ON CODE INPUT ──
 function checkCodeInput() {
-  if (noCode) return; // no code mode: org-field stays hidden
+  if (noCode) return;
   var codeType = document.getElementById('inp-code-type').value;
-  var codeNum = document.getElementById('inp-code-num').value.trim();
+  var codeNumEl = document.getElementById('inp-code-num');
+  var codeNum = codeNumEl.value.trim();
   var orgField = document.getElementById('org-field');
   var labelEl = document.getElementById('org-field-label');
   var lgmLabel = document.getElementById('org-lgm-label');
   var lsmLabel = document.getElementById('org-lsm-label');
+  var lgmSel = document.getElementById('inp-lgm');
+  var lsmSel = document.getElementById('inp-lsm');
+
+  // ── STAFF 선택 시: 자동 고정 ──
+  if (codeType === 'STAFF') {
+    // 코드 000000 고정
+    codeNumEl.value = '000000';
+    codeNumEl.readOnly = true;
+    codeNumEl.style.color = '#aaa';
+    // org-field 표시
+    orgField.style.display = 'block';
+    labelEl.innerHTML = 'สังกัดองค์กร <span class="f-req">*</span>';
+    lgmLabel.innerHTML = 'LGM <span class="s-req">*</span>';
+    lsmLabel.innerHTML = 'LSM <span class="s-req">*</span>';
+    // LGM = HQ 고정 (HQ 옵션 다시 표시)
+    var hqOpt = lgmSel.querySelector('option[value="HQ"]');
+    if (hqOpt) hqOpt.style.display = '';
+    lgmSel.value = 'HQ';
+    lgmSel.disabled = true;
+    lgmSel.classList.remove('placeholder-color');
+    // LSM = DST 고정
+    lsmSel.innerHTML = '<option value="DST" selected>DST</option>';
+    lsmSel.value = 'DST';
+    lsmSel.disabled = true;
+    lsmSel.classList.remove('placeholder-color');
+    return;
+  }
+
+  // ── STAFF 아닌 경우: LGM/LSM 원래대로 ──
+  codeNumEl.readOnly = false;
+  codeNumEl.style.color = '';
+  lgmSel.disabled = false;
+  lsmSel.disabled = false;
+  // LGM/LGF 선택 시 HQ 옵션 숨김
+  var hqOpt = lgmSel.querySelector('option[value="HQ"]');
+  if (hqOpt) hqOpt.style.display = 'none';
+
   var codeEntered = codeType && codeNum.length === 6;
   if (codeEntered) {
-    // Show org-field as REQUIRED
     orgField.style.display = 'block';
     labelEl.innerHTML = 'สังกัดองค์กร <span class="f-req">*</span>';
     lgmLabel.innerHTML = 'LGM <span class="s-req">*</span>';
     lsmLabel.innerHTML = 'LSM <span class="s-req">*</span>';
   } else {
-    // Hide org-field and reset
     orgField.style.display = 'none';
     labelEl.innerHTML = 'สังกัดองค์กร <span class="f-opt">(ถ้ามี)</span>';
     lgmLabel.innerHTML = 'LGM';
     lsmLabel.innerHTML = 'LSM';
-    // Reset values
-    var lgmSel = document.getElementById('inp-lgm');
-    var lsmSel = document.getElementById('inp-lsm');
     lgmSel.value = '';
     lgmSel.classList.add('placeholder-color');
     lsmSel.innerHTML = '<option value="" disabled selected>เลือก LSM</option>';
@@ -1141,7 +1179,7 @@ function validate() {
     var codeType = document.getElementById('inp-code-type').value;
     var codeNum = document.getElementById('inp-code-num').value.trim();
     // ถ้าเลือกประเภทโค้ดแล้ว ต้องกรอกครบ 6 หลัก
-    if (codeType && codeNum.length !== 6) {
+    if (codeType && codeType !== 'STAFF' && codeNum.length !== 6) {
       showToast('กรุณากรอกรหัสพนักงานขายให้ครบ 6 หลัก');
       document.getElementById('inp-code-num').scrollIntoView({behavior:'smooth', block:'center'});
       ok = false;
@@ -1175,21 +1213,13 @@ function submitForm() {
   var btn = document.getElementById('btn-submit');
   if (btn.disabled) return;
   if (!validate()) return;
-  // validate 통과 즉시 플래그 + 버튼 비활성화 (fetch 전에!)
+  // validate 통과 즉시 플래그 + 버튼 비활성화
   isSubmitting = true;
   btn.disabled = true;
   btn.style.opacity = '0.5';
   btn.textContent = 'กำลังส่งข้อมูล...';
-  // 제출 직전에도 인원 재확인
-  fetch(GAS_URL + '?action=count')
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-      if ((data.count || 0) >= MAX_REGISTRATIONS) {
-        showEventClosed(); return;
-      }
-      doSubmit();
-    })
-    .catch(function() { doSubmit(); }); // 실패 시 그냥 제출
+  // 바로 제출 (인원 제한은 GAS 서버에서 처리)
+  doSubmit();
 }
 function doSubmit() {
 
@@ -1302,7 +1332,7 @@ function showEventClosed() {
 }
 
 window.addEventListener('DOMContentLoaded', function() {
-  checkQuota();
+  // 인원 제한은 GAS 서버에서 처리 (CORS 문제로 클라이언트 체크 제거)
 });
 
 </script>
