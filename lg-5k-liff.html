@@ -1134,10 +1134,17 @@ function validate() {
     }
   }
 
-  // สังกัดองค์กร required when code is entered
+  // รหัสพนักงานขาย และ สังกัดองค์กร validation
   if (!noCode) {
     var codeType = document.getElementById('inp-code-type').value;
     var codeNum = document.getElementById('inp-code-num').value.trim();
+    // ถ้าเลือกประเภทโค้ดแล้ว ต้องกรอกครบ 6 หลัก
+    if (codeType && codeNum.length !== 6) {
+      showToast('กรุณากรอกรหัสพนักงานขายให้ครบ 6 หลัก');
+      document.getElementById('inp-code-num').scrollIntoView({behavior:'smooth', block:'center'});
+      ok = false;
+    }
+    // ถ้ากรอกโค้ดครบ 6 หลัก ต้องเลือก LGM/LSM
     if (codeType && codeNum.length === 6) {
       var orgLgm = document.getElementById('inp-lgm').value;
       var orgLsm = document.getElementById('inp-lsm').value;
@@ -1162,6 +1169,18 @@ function validate() {
 
 function submitForm() {
   if (!validate()) return;
+  // 제출 직전에도 인원 재확인
+  fetch(GAS_URL + '?action=count')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if ((data.count || 0) >= MAX_REGISTRATIONS) {
+        showEventClosed(); return;
+      }
+      doSubmit();
+    })
+    .catch(function() { doSubmit(); }); // 실패 시 그냥 제출
+}
+function doSubmit() {
 
   var data = {
     timestamp: new Date().toLocaleString('th-TH'),
@@ -1238,6 +1257,55 @@ if (typeof liff !== 'undefined') {
       // iOS에서 LIFF 실패해도 폼은 정상 작동
     });
 }
+
+// ── 등록 인원 제한 체크 ────────────────────────────────────
+var MAX_REGISTRATIONS = 100; // ← 최대 등록 인원 (여기서 변경)
+
+function checkQuota() {
+  fetch(GAS_URL + '?action=count')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      var count = data.count || 0;
+      if (count >= MAX_REGISTRATIONS) {
+        showEventClosed();
+      }
+    })
+    .catch(function(err) {
+      console.log('Quota check failed:', err);
+    });
+}
+
+function showEventClosed() {
+  var popup = document.getElementById('event-closed-popup');
+  if (popup) popup.style.display = 'flex';
+  var btn = document.getElementById('btn-submit');
+  if (btn) {
+    btn.disabled = true;
+    btn.style.opacity = '0.4';
+    btn.textContent = 'ปิดรับลงทะเบียนแล้ว';
+  }
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  checkQuota();
+});
+
 </script>
+
+<!-- ── 이벤트 종료 팝업 ── -->
+<div id="event-closed-popup" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:32px 24px;max-width:320px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <div style="font-size:48px;margin-bottom:12px;">🎽</div>
+    <div style="font-size:18px;font-weight:700;color:#c0392b;margin-bottom:10px;">ปิดรับลงทะเบียนแล้ว</div>
+    <div style="font-size:14px;color:#555;line-height:1.7;margin-bottom:20px;">
+      ขออภัย กิจกรรมนี้ได้ปิดรับสมัครเรียบร้อยแล้ว<br>
+      เนื่องจากมีผู้ลงทะเบียนครบจำนวนแล้ว<br><br>
+      <span style="color:#888;font-size:12px;">หากมีข้อสงสัย กรุณาติดต่อทีม DST</span>
+    </div>
+    <div style="background:#c0392b;color:#fff;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:600;">
+      กิจกรรมสิ้นสุดแล้ว
+    </div>
+  </div>
+</div>
 </body>
 </html>
