@@ -977,6 +977,7 @@ const LGM_LSM = {
 var noCode = false;
 var currentTab = 'register';
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbwtBc4pY_2SN9oHTQKxOHMUtsRHcpoiHCu-PrZZV8i_brUNTrM3ZmyKGtu_V7m8CF8f/exec';
+var isSubmitting = false; // ← 중복 제출 방지 플래그
 
 // ── RICH MENU TAB SWITCH ──
 function switchTab(tab) {
@@ -1169,10 +1170,16 @@ function validate() {
 }
 
 function submitForm() {
-  // 이미 제출 중이면 무시
+  // 이미 제출 중이면 완전 무시
+  if (isSubmitting) return;
   var btn = document.getElementById('btn-submit');
   if (btn.disabled) return;
   if (!validate()) return;
+  // validate 통과 즉시 플래그 + 버튼 비활성화 (fetch 전에!)
+  isSubmitting = true;
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+  btn.textContent = 'กำลังส่งข้อมูล...';
   // 제출 직전에도 인원 재확인
   fetch(GAS_URL + '?action=count')
     .then(function(res) { return res.json(); })
@@ -1185,11 +1192,6 @@ function submitForm() {
     .catch(function() { doSubmit(); }); // 실패 시 그냥 제출
 }
 function doSubmit() {
-  // ── 중복 제출 방지: 버튼 즉시 비활성화 ──
-  var btn = document.getElementById('btn-submit');
-  btn.disabled = true;
-  btn.style.opacity = '0.5';
-  btn.textContent = 'กำลังส่งข้อมูล...';
 
   var data = {
     timestamp: new Date().toLocaleString('th-TH'),
@@ -1225,18 +1227,19 @@ function doSubmit() {
   })
   .then(function() {
     document.getElementById('loading').style.display = 'none';
+    isSubmitting = false;
     document.getElementById('screen-form').style.display = 'none';
     document.getElementById('screen-info').style.display = 'none';
     document.getElementById('screen-guide').style.display = 'none';
     document.getElementById('screen-success').style.display = 'flex';
     window.scrollTo(0, 0);
-    // Show completion modal on top of success screen
     showCompletionModal();
   })
   .catch(function() {
     document.getElementById('loading').style.display = 'none';
     showToast('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
-    // 오류 시 버튼 재활성화
+    // 오류 시 버튼 재활성화 + 플래그 초기화
+    isSubmitting = false;
     var btn = document.getElementById('btn-submit');
     btn.disabled = false;
     btn.style.opacity = '1';
