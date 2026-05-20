@@ -1169,6 +1169,9 @@ function validate() {
 }
 
 function submitForm() {
+  // 이미 제출 중이면 무시
+  var btn = document.getElementById('btn-submit');
+  if (btn.disabled) return;
   if (!validate()) return;
   // 제출 직전에도 인원 재확인
   fetch(GAS_URL + '?action=count')
@@ -1182,6 +1185,11 @@ function submitForm() {
     .catch(function() { doSubmit(); }); // 실패 시 그냥 제출
 }
 function doSubmit() {
+  // ── 중복 제출 방지: 버튼 즉시 비활성화 ──
+  var btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+  btn.textContent = 'กำลังส่งข้อมูล...';
 
   var data = {
     timestamp: new Date().toLocaleString('th-TH'),
@@ -1228,6 +1236,11 @@ function doSubmit() {
   .catch(function() {
     document.getElementById('loading').style.display = 'none';
     showToast('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+    // 오류 시 버튼 재활성화
+    var btn = document.getElementById('btn-submit');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ยืนยันการลงทะเบียน';
   });
 }
 
